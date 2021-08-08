@@ -90,9 +90,9 @@ zuz_uz(){
         *.7z)
             x 7z xfv "$target_file"
             ;;
-    esac && [ -z "$DELETE_AFTER" ] && rm "$target_file"
+    esac && [ -z "$ZUZ_DELETE_AFTER" ] && rm "$target_file"
 }
 
 zuz_uzr(){
-    DELETE_AFTER=1 zuz_uz "$@"
+    ZUZ_DELETE_AFTER=1 zuz_uz "$@"
 }
