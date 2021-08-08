@@ -4,8 +4,8 @@ xrc param/v0
 zuz(){
     param <<A
 subcommand:
-    z       "zip"
-    uz      "unzip"
+    z|compress          "zip"
+    uz|decompress       "unzip"
 A
 
     if [ -z "$PARAM_SUBCMD" ]; then
@@ -80,7 +80,7 @@ zuz_uz(){
             tar xZvf "$target_file"
             ;;
         *.zip)
-            x zip -r "$target_file"
+            x unzip "$target_file"
             # unzip xfv "$target_file" "$@"
             ;;
         rar)
