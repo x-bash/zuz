@@ -8,15 +8,19 @@ subcommand:
     uz      "unzip"
 A
 
-    "zuz_$PARAM_SUBCMD" help
+    if [ -z "$PARAM_SUBCMD" ]; then
+        zuz help
+        return 0
+    fi
+
+    eval "zuz_$PARAM_SUBCMD" "$@"
 }
 
 zuz_z(){
     local target_file=${1:-filename}; shift
-
-    case $target_file in
+    case "$target_file" in
         *.tar)      
-            tar cvf "$target_file" "$@"    
+            tar cvf "$target_file" "$@"
             ;;
         *.tar.gz)
             tar czf "$target_file" "$@"
@@ -49,35 +53,40 @@ zuz_z(){
 # Reference: https://blog.csdn.net/example440982/article/details/51712973
 
 zuz_uz(){
-    local target_file=${1:-filename}; shift
+    local target_file=${1:-filename}
+    local dest_folder="${2:-.}"
+
+    target_file="$( cd "$(dirname "$target_file")" && pwd )"/$(basename "$target_file")
+    mkdir -p "$dest_folder"
+    cd "$dest_folder" || return 1
 
     case $target_file in
         *.tar)      
-            tar xvf "$target_file" "$@"
+            tar xvf "$target_file"
             ;;
         *.tar.gz)
-            tar xzvf "$target_file" "$@"
+            tar xzvf "$target_file"
             ;;
         *.gz)
-            gunzip -k -d "$target_file" "$@"
+            gunzip -k -d "$target_file"
             ;;
         *.bz2)
-            tar xjvf "$target_file" "$@"
+            tar xjvf "$target_file"
             ;;
         *.xz)
             xz -d "$target_file"
             ;;
         *.tar.Z)
-            tar xZvf "$target_file" "$@"
+            tar xZvf "$target_file"
             ;;
         *.zip)
-            x zip -r "$target_file" "$@"
+            x zip -r "$target_file"
             # unzip xfv "$target_file" "$@"
             ;;
         rar)
             ;;
         *.7z)               
-            x 7z xfv "$target_file" "$@"
+            x 7z xfv "$target_file"
             ;;
     esac
 }
