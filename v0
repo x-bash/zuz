@@ -74,6 +74,7 @@ zuz_uz(){
             tar xjvf "$target_file"
             ;;
         *.xz)
+            # TODO: Figure it out
             xz -d "$target_file"
             ;;
         *.tar.Z)
@@ -84,11 +85,12 @@ zuz_uz(){
             # unzip xfv "$target_file" "$@"
             ;;
         rar)
+            x unrar "$target_file"
             ;;
-        *.7z)               
+        *.7z)
             x 7z xfv "$target_file"
             ;;
-    esac
+    esac && [ -z "$DELETE_AFTER" ] && rm "$target_file"
 }
 
 zuz_uzr(){
