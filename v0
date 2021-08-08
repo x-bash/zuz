@@ -34,6 +34,7 @@ zuz_z(){
             tar cjf "$target_file" "$@"
             ;;
         *.xz)
+            # We can use 7zip to handle xz ? Little footprint.
             xz -c -kz "$@" > "$target_file" 
             ;;
         *.tar.Z)
