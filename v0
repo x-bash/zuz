@@ -18,33 +18,61 @@ A
     eval "zuz_$PARAM_SUBCMD" "$@"
 }
 
+# NOTICE: tar czf - "$@" | split -b "$size" -a 3 - "$target_file."
+# NOTICE: In some environments, split doesnot have -d option. Thus we are using 7zip to compress
+
 zuz_z(){
+    param <<A
+option:
+    --size        ""  <size>=0       =~   [^.]+
+    #1          "target file"
+A
+
     local target_file=${1:-filename}; shift
     case "$target_file" in
-        *.tar)      
-            tar cvf "$target_file" "$@"
+        *.tar)    
+            if [ "$size" != 0 ]; then
+                # We should use 7zip
+                x p7z
+            else  
+                tar cvf "$target_file" "$@"
+            fi
             ;;
         *.tar.gz)
-            tar czf "$target_file" "$@"
+            if [ "$size" != 0 ]; then
+                # We should use 7zip, because split command does not come with -d
+                tar czf - "$@" | split -a1 -b "$size" -a 3 - "$target_file."
+            else
+                tar czf "$target_file" "$@"
+            fi
             ;;
         *.gz)
             gzip -c "$@" > "$target_file"
             ;;
         *.bz2)
-            tar cjf "$target_file" "$@"
+            if [ "$size" != 0 ]; then
+                tar cjf - "$@" | split -d -b "$size" - "$target_file"
+            else
+                tar cjf "$target_file" "$@"
+            fi
             ;;
         *.xz)
             # We can use 7zip to handle xz ? Little footprint.
             xz -c -kz "$@" > "$target_file" 
             ;;
         *.tar.Z)
-            tar cZf "$target_file" "$@"
+            if [ "$size" != 0 ]; then
+                tar cZf - "$@" | split -d -b "$size" - "$target_file"
+            else
+                tar cZf "$target_file" "$@"
+            fi
             ;;
         *.zip)
             x zip -r "$target_file" "$@"
             # unzip xfv "$target_file" "$@"
             ;;
         rar)
+            # x unrar 
             ;;
         *.7z)               
             x 7z xfv "$target_file" "$@"
@@ -54,7 +82,7 @@ zuz_z(){
 
 # Reference: https://linuxhint.com/xz_compression_tutorial/
 # Reference: https://blog.csdn.net/example440982/article/details/51712973
-
+# Reference: https://wangying.sinaapp.com/archives/2574
 zuz_uz(){
     local target_file=${1:-filename}
     local dest_folder="${2:-.}"
@@ -70,18 +98,30 @@ zuz_uz(){
         *.tar.gz)
             tar xzvf "$target_file"
             ;;
-        *.gz)
-            gunzip -k -d "$target_file"
+        *.tar.Z)
+            tar xZvf "$target_file"
             ;;
         *.bz2)
             tar xjvf "$target_file"
             ;;
+        *.bz2.*)
+            cat "${target_file%.*}".* | tar xjvf
+            ;;
+        *.tar.Z.*)
+            cat "${target_file%.*}".* | tar xZvf
+            ;;
+        *.tar.gz.*)
+            cat "${target_file%.*}".* | tar xzv
+            ;;
+        *.tar.*)      
+            cat "${target_file%.*}".* | tar xvf
+            ;;
+        *.gz)
+            gunzip -k -d "$target_file"
+            ;;
         *.xz)
             # TODO: Figure it out
             xz -d "$target_file"
-            ;;
-        *.tar.Z)
-            tar xZvf "$target_file"
             ;;
         *.zip)
             x unzip "$target_file"
