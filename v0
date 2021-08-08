@@ -8,18 +8,6 @@ subcommand:
     uz      "unzip"
 A
 
-    if [ -z "$PARAM_SUBCMD" ]; then
-
-        case $# in
-
-            0)   zuz help   ;;
-            1)   zuz uz "$1" ;;
-            *)   zuz 
-
-        
-        return 0
-    fi
-
     "zuz_$PARAM_SUBCMD" help
 }
 
