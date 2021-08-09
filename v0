@@ -33,49 +33,55 @@ A
         *.tar)    
             if [ "$size" != 0 ]; then
                 # We should use 7zip
-                x p7z
+                x 7z -v$size "$target_file" "$@"
             else  
                 tar cvf "$target_file" "$@"
             fi
             ;;
         *.tar.gz)
             if [ "$size" != 0 ]; then
-                # We should use 7zip, because split command does not come with -d
-                tar czf - "$@" | split -a1 -b "$size" -a 3 - "$target_file."
+                x 7z -v$size "$target_file" "$@"
             else
                 tar czf "$target_file" "$@"
+            fi
+            ;;
+        *.tar.Z)
+            if [ "$size" != 0 ]; then
+                x 7z -v$size "$target_file" "$@"
+            else
+                tar cZf "$target_file" "$@"
+            fi
+            ;;
+        *.bz2)
+            if [ "$size" != 0 ]; then
+                x 7z -v$size "$target_file" "$@"
+            else
+                tar cjf "$target_file" "$@"
             fi
             ;;
         *.gz)
             gzip -c "$@" > "$target_file"
             ;;
-        *.bz2)
-            if [ "$size" != 0 ]; then
-                tar cjf - "$@" | split -d -b "$size" - "$target_file"
-            else
-                tar cjf "$target_file" "$@"
-            fi
-            ;;
         *.xz)
             # We can use 7zip to handle xz ? Little footprint.
             xz -c -kz "$@" > "$target_file" 
             ;;
-        *.tar.Z)
-            if [ "$size" != 0 ]; then
-                tar cZf - "$@" | split -d -b "$size" - "$target_file"
-            else
-                tar cZf "$target_file" "$@"
-            fi
-            ;;
         *.zip)
+            # Using zip facility
             x zip -r "$target_file" "$@"
             # unzip xfv "$target_file" "$@"
             ;;
         rar)
             # x unrar 
+            echo "Unsupported to compress as rar format." >&2
+            return 1
             ;;
-        *.7z)               
-            x 7z xfv "$target_file" "$@"
+        *.7z)
+            if [ "$size" != 0 ]; then             
+                x 7z a -v$size "$target_file" "$@"
+            else
+                x 7z a "$target_file" "$@"
+            fi
             ;;
     esac
 }
