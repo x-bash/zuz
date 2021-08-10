@@ -36,6 +36,10 @@ option:
     #1          "target file"
 A
 
+    if [ $# = 0 ]; then
+        zuz_z help
+    fi
+
     local target_file=${1:-filename}; shift
     case "$target_file" in
         *.tar)    
