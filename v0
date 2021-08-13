@@ -108,7 +108,7 @@ A
             if [ "$size" != 0 ]; then
                 # We should use 7zip
                 zuz_run x 7z -v$size "$target_file" "$@"
-            else  
+            else
                 zuz_run tar cvf "$target_file" "$@"
             fi
             ;;
