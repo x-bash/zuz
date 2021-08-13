@@ -160,4 +160,7 @@ A
     esac
 }
 
-
+if [ -z "$XRC_NO_ADVISE" ] && [ -n "${BASH_VERSION}${ZSH_VERSION}" ] && [ "${-#*i}" != "$-" ]; then
+    xrc advise/v0
+    advise zuz
+fi
