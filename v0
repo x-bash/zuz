@@ -3,12 +3,13 @@
 xrc param/v0
 
 zuz(){
-    param <<A
+    param:dsl <<A
 subcommand:
     z|compress          "zip"
     uz|decompress       "unzip"
     uzr                 "decompress then remove the original file"
 A
+    param:run
 
     if [ -z "$PARAM_SUBCMD" ]; then
         zuz help
@@ -30,11 +31,12 @@ zuz_run(){
 }
 
 zuz_z(){
-    param <<A
+    param:dsl <<A
 option:
     --size        ""  <size>=0       =~   [^.]+
     #1          "target file"
 A
+    param:run
 
     if [ $# = 0 ]; then
         zuz_z help
