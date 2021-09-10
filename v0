@@ -5,9 +5,9 @@ xrc param/v0
 zuz(){
     param:dsl <<A
 subcommand:
-    z|compress          "zip"
     uz|decompress       "unzip"
     uzr                 "decompress then remove the original file"
+    z|compress          "zip"
 A
     param:run
 
@@ -30,75 +30,6 @@ zuz_run(){
     eval "$@"
 }
 
-zuz_z(){
-    param:dsl <<A
-option:
-    --size        ""  <size>=0       =~   [^.]+
-    #1          "target file"
-A
-    param:run
-
-    if [ $# = 0 ]; then
-        zuz_z help
-    fi
-
-    local target_file=${1:-filename}; shift
-    case "$target_file" in
-        *.tar)    
-            if [ "$size" != 0 ]; then
-                # We should use 7zip
-                zuz_run x 7z -v$size "$target_file" "$@"
-            else  
-                zuz_run tar cvf "$target_file" "$@"
-            fi
-            ;;
-        *.tar.gz)
-            if [ "$size" != 0 ]; then
-                zuz_run x 7z -v$size "$target_file" "$@"
-            else
-                zuz_run tar czf "$target_file" "$@"
-            fi
-            ;;
-        *.tar.Z)
-            if [ "$size" != 0 ]; then
-                zuz_run x 7z -v$size "$target_file" "$@"
-            else
-                zuz_run tar cZf "$target_file" "$@"
-            fi
-            ;;
-        *.bz2)
-            if [ "$size" != 0 ]; then
-                zuz_run x 7z -v$size "$target_file" "$@"
-            else
-                zuz_run tar cjf "$target_file" "$@"
-            fi
-            ;;
-        *.gz)
-            zuz_run gzip -c "$@" > "$target_file"
-            ;;
-        *.xz)
-            # We can use 7zip to handle xz ? Little footprint.
-            zuz_run xz -c -kz "$@" > "$target_file" 
-            ;;
-        *.zip)
-            # Using zip facility
-            zuz_run x zip -r "$target_file" "$@"
-            # unzip xfv "$target_file" "$@"
-            ;;
-        rar)
-            # x unrar 
-            echo "Unsupported to compress as rar format." >&2
-            return 1
-            ;;
-        *.7z)
-            if [ "$size" != 0 ]; then             
-                zuz_run x 7zr a -v$size "$target_file" "$@"
-            else
-                zuz_run x 7zr a "$target_file" "$@"
-            fi
-            ;;
-    esac
-}
 
 # Reference: https://linuxhint.com/xz_compression_tutorial/
 # Reference: https://blog.csdn.net/example440982/article/details/51712973
@@ -159,3 +90,79 @@ zuz_uz(){
 zuz_uzr(){
     ZUZ_DELETE_AFTER=1 zuz_uz "$@"
 }
+
+
+zuz_z(){
+    param:dsl <<A
+option:
+    --size        ""  <size>=0       =~   [^.]+
+    #1          "target file"
+A
+    param:run
+
+    if [ $# = 0 ]; then
+        zuz_z help
+    fi
+
+    local target_file=${1:-filename}; shift
+    case "$target_file" in
+        *.tar)    
+            if [ "$size" != 0 ]; then
+                # We should use 7zip
+                zuz_run x 7z -v$size "$target_file" "$@"
+            else
+                zuz_run tar cvf "$target_file" "$@"
+            fi
+            ;;
+        *.tar.gz)
+            if [ "$size" != 0 ]; then
+                zuz_run x 7z -v$size "$target_file" "$@"
+            else
+                zuz_run tar czf "$target_file" "$@"
+            fi
+            ;;
+        *.tar.Z)
+            if [ "$size" != 0 ]; then
+                zuz_run x 7z -v$size "$target_file" "$@"
+            else
+                zuz_run tar cZf "$target_file" "$@"
+            fi
+            ;;
+        *.bz2)
+            if [ "$size" != 0 ]; then
+                zuz_run x 7z -v$size "$target_file" "$@"
+            else
+                zuz_run tar cjf "$target_file" "$@"
+            fi
+            ;;
+        *.gz)
+            zuz_run gzip -c "$@" > "$target_file"
+            ;;
+        *.xz)
+            # We can use 7zip to handle xz ? Little footprint.
+            zuz_run xz -c -kz "$@" > "$target_file" 
+            ;;
+        *.zip)
+            # Using zip facility
+            zuz_run x zip -r "$target_file" "$@"
+            # unzip xfv "$target_file" "$@"
+            ;;
+        rar)
+            # x unrar 
+            echo "Unsupported to compress as rar format." >&2
+            return 1
+            ;;
+        *.7z)
+            if [ "$size" != 0 ]; then             
+                zuz_run x 7zr a -v$size "$target_file" "$@"
+            else
+                zuz_run x 7zr a "$target_file" "$@"
+            fi
+            ;;
+    esac
+}
+
+if [ -z "$XRC_NO_ADVISE" ] && [ -n "${BASH_VERSION}${ZSH_VERSION}" ] && [ "${-#*i}" != "$-" ]; then
+    xrc advise/v0
+    advise zuz
+fi
