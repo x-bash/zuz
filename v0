@@ -83,7 +83,7 @@ zuz_uz(){
             zuz_run x unrar "$target_file"
             ;;
         *.7z)
-            zuz_run x 7zr xfv "$target_file"
+            zuz_run x 7zr x "$target_file"
             ;;
     esac && [ -z "$ZUZ_DELETE_AFTER" ] && rm "$target_file"
 }
