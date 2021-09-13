@@ -75,7 +75,8 @@ zuz_uz(){
             zuz_run xz -d "$target_file"
             ;;
         *.zip)
-            zuz_run x unzip "$target_file"
+            zuz_run x 7z e "$@"
+            # zuz_run x unzip "$target_file"
             # unzip xfv "$target_file" "$@"
             ;;
         rar)
@@ -144,8 +145,9 @@ A
             ;;
         *.zip)
             # Using zip facility
-            zuz_run x zip -r "$target_file" "$@"
+            # zuz_run zip -r "$target_file" "$@"
             # unzip xfv "$target_file" "$@"
+            zuz_run x 7z a -tzip -r "$target_file" "$@"
             ;;
         rar)
             # x unrar 
