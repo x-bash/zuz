@@ -72,7 +72,7 @@ ___x_cmd_zuz_uz(){
         *.tar.*)
             cat "${target_file%.*}".* | tar xvf
             ;;
-        *.gz)
+        *.tgz)
             ___x_cmd_zuz_run gunzip -k -d "$target_file"
             ;;
         *.xz)
@@ -114,7 +114,7 @@ ___x_cmd_zuz_ls(){
         *.bz2)
             ___x_cmd_zuz_run tar -t <"$target_file"  # bsdtar
             ;;
-        *.gz)
+        *.tgz)
             # TODO: something is wrong. check it out.
             ___x_cmd_zuz_run gzip --list "$target_file"
             ;;
@@ -180,7 +180,7 @@ A
                 ___x_cmd_zuz_run tar cjf "$target_file" "$@"
             fi
             ;;
-        *.gz)
+        *.tgz)
             # TODO: something is wrong. check it out.
             ___x_cmd_zuz_run gzip -c "$@" > "$target_file"
             ;;
