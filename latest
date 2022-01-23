@@ -96,7 +96,69 @@ ___x_cmd_zuz_uzr(){
     ZUZ_DELETE_AFTER=1 ___x_cmd_zuz_uz "$@"
 }
 
+# Section: list zip file
+___x_cmd_zuz_ls(){
+    local target_file=${1:-filename}; shift
+    case "$target_file" in
+        *.tar)    
+            if [ "$size" != 0 ]; then
+                # We should use 7zip
+                ___x_cmd_zuz_run x 7z -v$size "$target_file" "$@"
+            else
+                ___x_cmd_zuz_run tar cvf "$target_file" "$@"
+            fi
+            ;;
+        *.tar.gz)
+            if [ "$size" != 0 ]; then
+                ___x_cmd_zuz_run x 7z -v$size "$target_file" "$@"
+            else
+                ___x_cmd_zuz_run tar czf "$target_file" "$@"
+            fi
+            ;;
+        *.tar.Z)
+            if [ "$size" != 0 ]; then
+                ___x_cmd_zuz_run x 7z -v$size "$target_file" "$@"
+            else
+                ___x_cmd_zuz_run tar cZf "$target_file" "$@"
+            fi
+            ;;
+        *.bz2)
+            if [ "$size" != 0 ]; then
+                ___x_cmd_zuz_run x 7z -v$size "$target_file" "$@"
+            else
+                ___x_cmd_zuz_run tar cjf "$target_file" "$@"
+            fi
+            ;;
+        *.gz)
+            ___x_cmd_zuz_run gzip -c "$@" > "$target_file"
+            ;;
+        *.xz)
+            # We can use 7zip to handle xz ? Little footprint.
+            ___x_cmd_zuz_run xz -c -kz "$@" > "$target_file" 
+            ;;
+        *.zip)
+            # Using zip facility
+            # ___x_cmd_zuz_run zip -r "$target_file" "$@"
+            # unzip xfv "$target_file" "$@"
+            ___x_cmd_zuz_run x 7z a -tzip -r "$target_file" "$@"
+            ;;
+        rar)
+            # x unrar 
+            echo "Unsupported to compress as rar format." >&2
+            return 1
+            ;;
+        *.7z)
+            if [ "$size" != 0 ]; then             
+                ___x_cmd_zuz_run x 7zr a -v$size "$target_file" "$@"
+            else
+                ___x_cmd_zuz_run x 7zr a "$target_file" "$@"
+            fi
+            ;;
+    esac
+}
+# EndSection
 
+# Section: zip the file
 ___x_cmd_zuz_z(){
     param:dsl <<A
 option:
@@ -167,5 +229,6 @@ A
             ;;
     esac
 }
+# EndSection
 
 xrc setmain ___x_cmd_zuz
