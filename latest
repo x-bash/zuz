@@ -103,58 +103,33 @@ ___x_cmd_zuz_ls(){
     local target_file=${1:-filename}; shift
     case "$target_file" in
         *.tar)
-            if [ "$size" != 0 ]; then
-                # We should use 7zip
-                ___x_cmd_zuz_run x 7z -v$size "$target_file" "$@"
-            else
-                ___x_cmd_zuz_run tar cvf "$target_file" "$@"
-            fi
+            ___x_cmd_zuz_run tar -t <"$target_file"  # bsdtar
             ;;
         *.tar.gz)
-            if [ "$size" != 0 ]; then
-                ___x_cmd_zuz_run x 7z -v$size "$target_file" "$@"
-            else
-                ___x_cmd_zuz_run tar czf "$target_file" "$@"
-            fi
+            ___x_cmd_zuz_run tar -t <"$target_file"  # bsdtar
             ;;
         *.tar.Z)
-            if [ "$size" != 0 ]; then
-                ___x_cmd_zuz_run x 7z -v$size "$target_file" "$@"
-            else
-                ___x_cmd_zuz_run tar cZf "$target_file" "$@"
-            fi
+            ___x_cmd_zuz_run tar -t <"$target_file"  # bsdtar
             ;;
         *.bz2)
-            if [ "$size" != 0 ]; then
-                ___x_cmd_zuz_run x 7z -v$size "$target_file" "$@"
-            else
-                ___x_cmd_zuz_run tar cjf "$target_file" "$@"
-            fi
+            ___x_cmd_zuz_run tar -t <"$target_file"  # bsdtar
             ;;
         *.gz)
             ___x_cmd_zuz_run gzip -c "$@" > "$target_file"
             ;;
         *.xz)
-            # We can use 7zip to handle xz ? Little footprint.
-            ___x_cmd_zuz_run xz -c -kz "$@" > "$target_file"
+            echo "Unsupported to list xz file." >&2
             ;;
         *.zip)
-            # Using zip facility
-            # ___x_cmd_zuz_run zip -r "$target_file" "$@"
-            # unzip xfv "$target_file" "$@"
-            ___x_cmd_zuz_run x 7z a -tzip -r "$target_file" "$@"
+            ___x_cmd_zuz_run tar -t <"$target_file"  # bsdtar
             ;;
         rar)
             # x unrar
-            echo "Unsupported to compress as rar format." >&2
+            echo "Unsupported to list rar file." >&2
             return 1
             ;;
         *.7z)
-            if [ "$size" != 0 ]; then
-                ___x_cmd_zuz_run x 7zr a -v$size "$target_file" "$@"
-            else
-                ___x_cmd_zuz_run x 7zr a "$target_file" "$@"
-            fi
+            7z l -ba "$target_file" | awk '{ print $NF }'
             ;;
     esac
 }
