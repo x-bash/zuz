@@ -168,9 +168,4 @@ A
     esac
 }
 
-if ___x_cmd_is_suitable_advise_env; then
-    xrc advise/latest
-    advise zuz
-fi
-
 xrc setmain ___x_cmd_zuz
