@@ -1,11 +1,9 @@
 # shellcheck shell=sh disable=SC3043 # xrc
 
 # shellcheck shell=sh
-
 # author:       Li Junhao           l@x-cmd.com
 
 xrc param/v0
-
 ___x_cmd_zuz(){
     param:dsl <<A
 subcommand:
