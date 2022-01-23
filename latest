@@ -23,6 +23,7 @@ A
     eval "___x_cmd_zuz_$PARAM_SUBCMD" "$@"
 }
 
+# Section: other
 # NOTICE: tar czf - "$@" | split -b "$size" -a 3 - "$target_file."
 # NOTICE: In some environments, split doesnot have -d option. Thus we are using 7zip to compress
 
@@ -33,7 +34,9 @@ ___x_cmd_zuz_run(){
     zuz_log info "Command to execute: $*"
     eval "$@"
 }
+# EndSection
 
+# Section: unzip the zip file
 
 # Reference: https://linuxhint.com/xz_compression_tutorial/
 # Reference: https://blog.csdn.net/example440982/article/details/51712973
@@ -47,7 +50,7 @@ ___x_cmd_zuz_uz(){
     cd "$dest_folder" || return 1
 
     case $target_file in
-        *.tar)      
+        *.tar)
             ___x_cmd_zuz_run tar xvf "$target_file"
             ;;
         *.tar.gz)
@@ -68,7 +71,7 @@ ___x_cmd_zuz_uz(){
         *.tar.gz.*)
             cat "${target_file%.*}".* | tar xzv
             ;;
-        *.tar.*)      
+        *.tar.*)
             cat "${target_file%.*}".* | tar xvf
             ;;
         *.gz)
@@ -95,12 +98,13 @@ ___x_cmd_zuz_uz(){
 ___x_cmd_zuz_uzr(){
     ZUZ_DELETE_AFTER=1 ___x_cmd_zuz_uz "$@"
 }
+# EndSection
 
 # Section: list zip file
 ___x_cmd_zuz_ls(){
     local target_file=${1:-filename}; shift
     case "$target_file" in
-        *.tar)    
+        *.tar)
             if [ "$size" != 0 ]; then
                 # We should use 7zip
                 ___x_cmd_zuz_run x 7z -v$size "$target_file" "$@"
@@ -134,7 +138,7 @@ ___x_cmd_zuz_ls(){
             ;;
         *.xz)
             # We can use 7zip to handle xz ? Little footprint.
-            ___x_cmd_zuz_run xz -c -kz "$@" > "$target_file" 
+            ___x_cmd_zuz_run xz -c -kz "$@" > "$target_file"
             ;;
         *.zip)
             # Using zip facility
@@ -143,12 +147,12 @@ ___x_cmd_zuz_ls(){
             ___x_cmd_zuz_run x 7z a -tzip -r "$target_file" "$@"
             ;;
         rar)
-            # x unrar 
+            # x unrar
             echo "Unsupported to compress as rar format." >&2
             return 1
             ;;
         *.7z)
-            if [ "$size" != 0 ]; then             
+            if [ "$size" != 0 ]; then
                 ___x_cmd_zuz_run x 7zr a -v$size "$target_file" "$@"
             else
                 ___x_cmd_zuz_run x 7zr a "$target_file" "$@"
@@ -173,7 +177,7 @@ A
 
     local target_file=${1:-filename}; shift
     case "$target_file" in
-        *.tar)    
+        *.tar)
             if [ "$size" != 0 ]; then
                 # We should use 7zip
                 ___x_cmd_zuz_run x 7z -v$size "$target_file" "$@"
@@ -207,7 +211,7 @@ A
             ;;
         *.xz)
             # We can use 7zip to handle xz ? Little footprint.
-            ___x_cmd_zuz_run xz -c -kz "$@" > "$target_file" 
+            ___x_cmd_zuz_run xz -c -kz "$@" > "$target_file"
             ;;
         *.zip)
             # Using zip facility
@@ -216,12 +220,12 @@ A
             ___x_cmd_zuz_run x 7z a -tzip -r "$target_file" "$@"
             ;;
         rar)
-            # x unrar 
+            # x unrar
             echo "Unsupported to compress as rar format." >&2
             return 1
             ;;
         *.7z)
-            if [ "$size" != 0 ]; then             
+            if [ "$size" != 0 ]; then
                 ___x_cmd_zuz_run x 7zr a -v$size "$target_file" "$@"
             else
                 ___x_cmd_zuz_run x 7zr a "$target_file" "$@"
