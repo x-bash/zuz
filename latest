@@ -115,7 +115,8 @@ ___x_cmd_zuz_ls(){
             ___x_cmd_zuz_run tar -t <"$target_file"  # bsdtar
             ;;
         *.gz)
-            ___x_cmd_zuz_run gzip -c "$@" > "$target_file"
+            # TODO: something is wrong. check it out.
+            ___x_cmd_zuz_run gzip --list "$target_file"
             ;;
         *.xz)
             echo "Unsupported to list xz file." >&2
@@ -180,6 +181,7 @@ A
             fi
             ;;
         *.gz)
+            # TODO: something is wrong. check it out.
             ___x_cmd_zuz_run gzip -c "$@" > "$target_file"
             ;;
         *.xz)
