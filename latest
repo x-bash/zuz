@@ -6,7 +6,7 @@
 
 xrc param/v0
 
-zuz(){
+___x_cmd_zuz(){
     param:dsl <<A
 subcommand:
     uz|decompress       "unzip"
@@ -16,11 +16,11 @@ A
     param:run
 
     if [ -z "$PARAM_SUBCMD" ]; then
-        zuz help
+        ___x_cmd_zuz help
         return 0
     fi
 
-    eval "___zuz_$PARAM_SUBCMD" "$@"
+    eval "___x_cmd_zuz_$PARAM_SUBCMD" "$@"
 }
 
 # NOTICE: tar czf - "$@" | split -b "$size" -a 3 - "$target_file."
@@ -28,7 +28,7 @@ A
 
 x log init zuz
 
-___zuz_run(){
+___x_cmd_zuz_run(){
     local IFS
     zuz_log info "Command to execute: $*"
     eval "$@"
@@ -38,7 +38,7 @@ ___zuz_run(){
 # Reference: https://linuxhint.com/xz_compression_tutorial/
 # Reference: https://blog.csdn.net/example440982/article/details/51712973
 # Reference: https://wangying.sinaapp.com/archives/2574
-___zuz_uz(){
+___x_cmd_zuz_uz(){
     local target_file=${1:-filename}
     local dest_folder="${2:-.}"
 
@@ -48,16 +48,16 @@ ___zuz_uz(){
 
     case $target_file in
         *.tar)      
-            ___zuz_run tar xvf "$target_file"
+            ___x_cmd_zuz_run tar xvf "$target_file"
             ;;
         *.tar.gz)
-            ___zuz_run tar xzvf "$target_file"
+            ___x_cmd_zuz_run tar xzvf "$target_file"
             ;;
         *.tar.Z)
-            ___zuz_run tar xZvf "$target_file"
+            ___x_cmd_zuz_run tar xZvf "$target_file"
             ;;
         *.bz2)
-            ___zuz_run tar xjvf "$target_file"
+            ___x_cmd_zuz_run tar xjvf "$target_file"
             ;;
         *.bz2.*)
             cat "${target_file%.*}".* | tar xjvf
@@ -72,32 +72,32 @@ ___zuz_uz(){
             cat "${target_file%.*}".* | tar xvf
             ;;
         *.gz)
-            ___zuz_run gunzip -k -d "$target_file"
+            ___x_cmd_zuz_run gunzip -k -d "$target_file"
             ;;
         *.xz)
             # TODO: Figure it out
-            ___zuz_run xz -d "$target_file"
+            ___x_cmd_zuz_run xz -d "$target_file"
             ;;
         *.zip)
-            ___zuz_run x 7z e "$@"
-            # ___zuz_run x unzip "$target_file"
+            ___x_cmd_zuz_run x 7z e "$@"
+            # ___x_cmd_zuz_run x unzip "$target_file"
             # unzip xfv "$target_file" "$@"
             ;;
         rar)
-            ___zuz_run x unrar "$target_file"
+            ___x_cmd_zuz_run x unrar "$target_file"
             ;;
         *.7z)
-            ___zuz_run x 7zr x "$target_file"
+            ___x_cmd_zuz_run x 7zr x "$target_file"
             ;;
     esac && [ -z "$ZUZ_DELETE_AFTER" ] && rm "$target_file"
 }
 
-___zuz_uzr(){
-    ZUZ_DELETE_AFTER=1 ___zuz_uz "$@"
+___x_cmd_zuz_uzr(){
+    ZUZ_DELETE_AFTER=1 ___x_cmd_zuz_uz "$@"
 }
 
 
-___zuz_z(){
+___x_cmd_zuz_z(){
     param:dsl <<A
 option:
     --size        ""  <size>=0       =~   [^.]+
@@ -106,7 +106,7 @@ A
     param:run
 
     if [ $# = 0 ]; then
-        ___zuz_z help
+        ___x_cmd_zuz_z help
     fi
 
     local target_file=${1:-filename}; shift
@@ -114,44 +114,44 @@ A
         *.tar)    
             if [ "$size" != 0 ]; then
                 # We should use 7zip
-                ___zuz_run x 7z -v$size "$target_file" "$@"
+                ___x_cmd_zuz_run x 7z -v$size "$target_file" "$@"
             else
-                ___zuz_run tar cvf "$target_file" "$@"
+                ___x_cmd_zuz_run tar cvf "$target_file" "$@"
             fi
             ;;
         *.tar.gz)
             if [ "$size" != 0 ]; then
-                ___zuz_run x 7z -v$size "$target_file" "$@"
+                ___x_cmd_zuz_run x 7z -v$size "$target_file" "$@"
             else
-                ___zuz_run tar czf "$target_file" "$@"
+                ___x_cmd_zuz_run tar czf "$target_file" "$@"
             fi
             ;;
         *.tar.Z)
             if [ "$size" != 0 ]; then
-                ___zuz_run x 7z -v$size "$target_file" "$@"
+                ___x_cmd_zuz_run x 7z -v$size "$target_file" "$@"
             else
-                ___zuz_run tar cZf "$target_file" "$@"
+                ___x_cmd_zuz_run tar cZf "$target_file" "$@"
             fi
             ;;
         *.bz2)
             if [ "$size" != 0 ]; then
-                ___zuz_run x 7z -v$size "$target_file" "$@"
+                ___x_cmd_zuz_run x 7z -v$size "$target_file" "$@"
             else
-                ___zuz_run tar cjf "$target_file" "$@"
+                ___x_cmd_zuz_run tar cjf "$target_file" "$@"
             fi
             ;;
         *.gz)
-            ___zuz_run gzip -c "$@" > "$target_file"
+            ___x_cmd_zuz_run gzip -c "$@" > "$target_file"
             ;;
         *.xz)
             # We can use 7zip to handle xz ? Little footprint.
-            ___zuz_run xz -c -kz "$@" > "$target_file" 
+            ___x_cmd_zuz_run xz -c -kz "$@" > "$target_file" 
             ;;
         *.zip)
             # Using zip facility
-            # ___zuz_run zip -r "$target_file" "$@"
+            # ___x_cmd_zuz_run zip -r "$target_file" "$@"
             # unzip xfv "$target_file" "$@"
-            ___zuz_run x 7z a -tzip -r "$target_file" "$@"
+            ___x_cmd_zuz_run x 7z a -tzip -r "$target_file" "$@"
             ;;
         rar)
             # x unrar 
@@ -160,9 +160,9 @@ A
             ;;
         *.7z)
             if [ "$size" != 0 ]; then             
-                ___zuz_run x 7zr a -v$size "$target_file" "$@"
+                ___x_cmd_zuz_run x 7zr a -v$size "$target_file" "$@"
             else
-                ___zuz_run x 7zr a "$target_file" "$@"
+                ___x_cmd_zuz_run x 7zr a "$target_file" "$@"
             fi
             ;;
     esac
