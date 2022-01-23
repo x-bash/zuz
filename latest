@@ -173,4 +173,4 @@ if ___x_cmd_is_suitable_advise_env; then
     advise zuz
 fi
 
-xrc setmain zuz
+xrc setmain ___x_cmd_zuz
