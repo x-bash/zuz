@@ -229,6 +229,10 @@ A
                 ___x_cmd_zuz_run x 7zr a "$target_file" "$@"
             fi
             ;;
+        *)
+            ___x_cmd_zuz_z --help
+            return 1
+            ;;
     esac
 }
 # EndSection
