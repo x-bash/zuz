@@ -148,8 +148,7 @@ ___x_cmd_zuz_ls(){
             return 1
             ;;
         *.7z)
-            # TODO: something is wrong. check it out.
-            7z l -ba "$target_file" | awk '{ print $NF }'
+            x 7z l -ba "$target_file" | awk '{ print $NF }'
             ;;
     esac
 }
