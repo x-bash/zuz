@@ -52,13 +52,15 @@ ___x_cmd_zuz_run(){
 
 # Section: unzip the zip file
 
+
 # Reference: https://linuxhint.com/xz_compression_tutorial/
 # Reference: https://blog.csdn.net/example440982/article/details/51712973
 # Reference: https://wangying.sinaapp.com/archives/2574
 ___x_cmd_zuz_uz(){
     param:void
-    local target_file="${1:-filename}"
+    local target_file="${1:?Please provide filename}"
     local dest_folder="${2:-.}"
+    shift 2
 
     target_file="$( cd "$(dirname "$target_file")" && pwd )"/$(basename "$target_file")
     mkdir -p "$dest_folder"
@@ -206,6 +208,49 @@ ___x_cmd_zuz_ll(){
     esac
 }
 # EndSection
+
+# Section: cat zip file, following the list of files to cat ...
+___x_cmd_zuz_cat(){
+    param:void
+    local target_file="${1:-filename}"; shift
+    local logger_msg="$target_file"
+    case "$target_file" in
+        *.tar)
+            ___x_cmd_zuz_run tar -t <"$target_file"  # bsdtar
+            ;;
+        *.tar.gz)
+            ___x_cmd_zuz_run tar -t <"$target_file"  # bsdtar
+            ;;
+        *.tar.Z)
+            ___x_cmd_zuz_run tar -t <"$target_file"  # bsdtar
+            ;;
+        *.bz2)
+            ___x_cmd_zuz_run tar -t <"$target_file"  # bsdtar
+            ;;
+        *.tgz)
+            logger_msg=
+            ___x_cmd_zuz_run gzip --list "$target_file"
+            ;;
+        *.xz)
+            zuz_log error "Unsupported to list xz file.">&2
+            return 1
+            ;;
+        *.zip)
+            ___x_cmd_zuz_run x 7z l -ba "$target_file"  # bsdtar
+            ;;
+        *.rar)
+            # x unrar
+            zuz_log error "Unsupported to list rar file.">&2
+            return 1
+            ;;
+        *.7z)
+            logger_msg=
+            ___x_cmd_zuz_run x 7z l -ba "$target_file" | awk '{ print $NF }'
+            ;;
+    esac
+}
+# EndSection
+
 
 # Section: zip the file
 ___x_cmd_zuz_z(){
