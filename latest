@@ -16,7 +16,7 @@ subcommand:
     ls                  "list compress inside file"
 A
     param:run
-
+    echo "___x_cmd_zuz_$PARAM_SUBCMD" "$@"
     if [ -z "$PARAM_SUBCMD" ] || [ -z "$*" ]; then
         printf "\n%s\n    %s\n    %s\n    %s\n    %s\n" \
                 "SYMPOSIS:" \
