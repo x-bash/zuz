@@ -77,6 +77,7 @@ ___x_cmd_zuz_uz_whole_file(){
     esac
 }
 
+# TODO: ___x_cmd_zuz_uz_and_files src.py=src/a.py src.doc=src/inner/a.doc
 ___x_cmd_zuz_uz_and_files(){
     case $target_file in
         *.tar)
