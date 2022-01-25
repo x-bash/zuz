@@ -3,18 +3,25 @@
 # shellcheck shell=sh
 # author:       Li Junhao           l@x-cmd.com
 
+# TODO: Use Param Generator SYMPOSIS
 xrc param/v0
 ___x_cmd_zuz(){
     param:dsl <<A
 subcommand:
-    uz|decompress       "unzip"
-    uzr                 "decompress then remove the original file"
-    ls                  "list file"
-    z|compress          "zip"
+    z|compress          "compress file"
+    uz|decompress       "decompress zipfile"
+    uzr                 "decompress zipfile then remove the original file"
+    ls                  "list compress inside file"
 A
     param:run
 
-    if [ -z "$PARAM_SUBCMD" ]; then
+    if [ -z "$PARAM_SUBCMD" ] || [ -z "$*" ]; then
+        printf "\n%s\n    %s\n    %s\n    %s\n    %s\n" \
+                "SYMPOSIS:" \
+                "x z <zipfile> <source...>" \
+                "x uz <zipfile>" \
+                "x uzr <zipfile>" \
+                "x zl <zipfile>"
         ___x_cmd_zuz help
         return 0
     fi
@@ -49,6 +56,7 @@ ___x_cmd_zuz_run(){
 # Reference: https://blog.csdn.net/example440982/article/details/51712973
 # Reference: https://wangying.sinaapp.com/archives/2574
 ___x_cmd_zuz_uz(){
+    param:void
     local target_file="${1:-filename}"
     local dest_folder="${2:-.}"
 
@@ -110,12 +118,14 @@ ___x_cmd_zuz_uz(){
 }
 
 ___x_cmd_zuz_uzr(){
+    param:void
     ZUZ_DELETE_AFTER=1 ___x_cmd_zuz_uz "$@"
 }
 # EndSection
 
 # Section: list zip file
 ___x_cmd_zuz_ls(){
+    param:void
     local target_file="${1:-filename}"; shift
     local logger_msg="$target_file"
     case "$target_file" in
@@ -132,7 +142,7 @@ ___x_cmd_zuz_ls(){
             ___x_cmd_zuz_run tar -t <"$target_file"  # bsdtar
             ;;
         *.tgz)
-            # TODO: something is wrong. check it out.
+            logger_msg=
             ___x_cmd_zuz_run gzip --list "$target_file"
             ;;
         *.xz)
@@ -148,7 +158,8 @@ ___x_cmd_zuz_ls(){
             return 1
             ;;
         *.7z)
-            x 7z l -ba "$target_file" | awk '{ print $NF }'
+            logger_msg=
+            ___x_cmd_zuz_run x 7z l -ba "$target_file" | awk '{ print $NF }'
             ;;
     esac
 }
@@ -199,8 +210,8 @@ A
             fi
             ;;
         *.tgz)
-            # TODO: something is wrong. check it out.
-            ___x_cmd_zuz_run gzip -c "$@" > "$target_file"
+            local logger_msg="> $target_file"
+            ___x_cmd_zuz_run gzip -c -r "$@" > "$target_file"
             ;;
         *.xz)
              # TODO: xz: fontend: Is a directory, skipping
