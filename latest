@@ -19,10 +19,10 @@ A
     if [ -z "$PARAM_SUBCMD" ] || [ -z "$*" ]; then
         printf "\n%s\n    %s\n    %s\n    %s\n    %s\n" \
                 "SYMPOSIS:" \
-                "x z <zipfile> <source...>" \
-                "x uz <zipfile>" \
+                "x z   <zipfile> <source...>" \
+                "x uz  <zipfile>" \
                 "x uzr <zipfile>" \
-                "x zl <zipfile>"
+                "x zl  <zipfile>"
         ___x_cmd_zuz help
         return 0
     fi
