@@ -141,7 +141,7 @@ ___x_cmd_zuz_uz_and_files(){
 }
 
 ___x_cmd_zuz_uzr(){
-    param:void
+
     ZUZ_DELETE_AFTER=1 ___x_cmd_zuz_uz "$@"
 }
 ## EndSection

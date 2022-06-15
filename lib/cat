@@ -1,7 +1,7 @@
 # shellcheck shell=sh disable=SC2034,SC2154,SC3043
 # Section: cat zip file, following the list of files to cat ...
 ___x_cmd_zuz_cat(){
-    param:void
+
     local target_file="${1:-filename}"; shift
     local logger_msg="$target_file"
     case "$target_file" in

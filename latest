@@ -5,29 +5,19 @@ xrc:mod:lib zuz     cat ls z
 
 # Section: main
 
-# TODO: Use Param Generator SYMPOSIS
 ___x_cmd_zuz(){
     case "$1" in
-        z|compress)         ___x_cmd_zuz_z      "$@" ;;
-        uz|decompress)      ___x_cmd_zuz_uz     "$@" ;;
-        uzr)                ___x_cmd_zuz_uzr    "$@" ;;
-        ls)                 ___x_cmd_zuz_ls     "$@" ;;
+        z|compress)         shift; ___x_cmd_zuz_z      "$@" ;;
+        uz|decompress)      shift; ___x_cmd_zuz_uz     "$@" ;;
+        uzr)                shift; ___x_cmd_zuz_uzr    "$@" ;;
+        ls)                 shift; ___x_cmd_zuz_ls     "$@" ;;
+        help)               shift; ___x_cmd_zuz_help   "$@" ;;
+        *)                  zuz:error "subcommand Not found."; ___x_cmd_zuz_help;
     esac
+}
 
-    param:dsl <<A
-subcommand:
-    z|compress          "compress file"
-    uz|decompress       "decompress zipfile"
-    uzr                 "decompress zipfile then remove the original file"
-    ls                  "list compress inside file"
-A
-    param:run
-    if [ -z "$PARAM_SUBCMD" ] || [ -z "$*" ]; then
-        cat "$___X_CMD_MOD_ROOT/zuz/lib/help.txt"
-        return 0
-    fi
-
-    "___x_cmd_zuz_$PARAM_SUBCMD" "$@"
+___x_cmd_zuz_help(){
+    cat "$___X_CMD_ROOT_MOD/zuz/lib/help.txt" >&2
 }
 
 # EndSection
