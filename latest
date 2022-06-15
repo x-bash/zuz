@@ -11,14 +11,12 @@ ___x_cmd_zuz(){
         uzr)                    shift; ___x_cmd_zuz_uzr    "$@" ;;
         ls)                     shift; ___x_cmd_zuz_ls     "$@" ;;
         help|-h|--help)         shift; ___x_cmd_zuz_help   "$@" ;;
-        _x_cmd_advise_json)     ___x_cmd_zuz_x_cmd_advise_json  ;;
+        _x_cmd_advise_json)     cat "$___X_CMD_ROOT_MOD/zuz/lib/zuz.advise.json" >&2 ;;
         *)                      ___x_cmd_zuz_help; zuz:error "subcommand Not found." ;;
     esac
 }
 
 ___x_cmd_zuz_help(){ cat "$___X_CMD_ROOT_MOD/zuz/lib/help.txt" >&2 ;}
-___x_cmd_zuz_x_cmd_advise_json(){ cat "$___X_CMD_ROOT_MOD/zuz/lib/zuz.advise.json" >&2 ;}
-
 ## EndSection
 
 # Section: other
