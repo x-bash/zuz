@@ -4,7 +4,6 @@
 xrc:mod:lib zuz     cat ls z
 
 # Section: main
-
 ___x_cmd_zuz(){
     case "$1" in
         z|compress)         shift; ___x_cmd_zuz_z      "$@" ;;
@@ -20,7 +19,7 @@ ___x_cmd_zuz_help(){
     cat "$___X_CMD_ROOT_MOD/zuz/lib/help.txt" >&2
 }
 
-# EndSection
+## EndSection
 
 # Section: other
 # NOTICE: tar czf - "$@" | split -b "$size" -a 3 - "$target_file."
@@ -38,6 +37,6 @@ ___x_cmd_zuz_run(){
     [ "$exit_code" = 0 ] || zuz:error "EXIT=$exit_code: $*"
     return $exit_code
 }
-# EndSection
+## EndSection
 
 xrc setmain ___x_cmd_zuz
