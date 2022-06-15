@@ -1,8 +1,8 @@
 SYMPOSIS:
     x z   <zipfile> <source...>
     x uz  <zipfile>
-    x uzr <zipfile>
-    x zl  <zipfile>
+    x zuz uzr <zipfile>
+    x zuz ls  <zipfile>
 
 subcommand:
     z|compress          compress file

@@ -37,7 +37,7 @@ ___x_cmd_zuz_z(){
                 # TODO: We should use 7zip
                 ___x_cmd_zuz_run x 7z -v"$size" "$target_file" "$@"
             else
-                local logger_msg="&& xz $target_file"
+                local extra_logger_msg="&& xz ${target_file%.*}"
                 ___x_cmd_zuz_run tar cvf "${target_file%.*}" "$@" && xz "${target_file%.*}"
             fi
             ;;
@@ -56,8 +56,9 @@ ___x_cmd_zuz_z(){
             fi
             ;;
         *.xz)
-            # xz: Can't zip directory, Will skipping. Can use tar container.
+            # NOTE: xz: Can't compress directory, Will skipping. Can use tar container.
             # We can use 7zip to handle xz ? Little footprint.
+            local extra_logger_msg="> $target_file"
             ___x_cmd_zuz_run xz -c -kz "$@" > "$target_file"
             ;;
         *.zip)
@@ -80,7 +81,7 @@ ___x_cmd_zuz_z(){
             fi
             ;;
         *)
-            ___x_cmd_zuz_z --help
+            ___x_cmd_zuz --help; zuz:warn "Unsupported to compress as $target_file format.";
             return 1
             ;;
     esac

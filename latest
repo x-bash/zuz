@@ -1,8 +1,8 @@
 # Author:       Li Junhao                   l@x-cmd.com
 # shellcheck    shell=sh disable=SC3043     # xrc
 
-xrc:mod:lib zuz     cat ls z
-
+x log init zuz
+xrc:mod:lib zuz     cat ls z uz
 # Section: main
 ___x_cmd_zuz(){
     case "$1" in
@@ -10,8 +10,8 @@ ___x_cmd_zuz(){
         uz|decompress)      shift; ___x_cmd_zuz_uz     "$@" ;;
         uzr)                shift; ___x_cmd_zuz_uzr    "$@" ;;
         ls)                 shift; ___x_cmd_zuz_ls     "$@" ;;
-        help)               shift; ___x_cmd_zuz_help   "$@" ;;
-        *)                  zuz:error "subcommand Not found."; ___x_cmd_zuz_help;
+        help|-h|--help)     shift; ___x_cmd_zuz_help   "$@" ;;
+        *)                  ___x_cmd_zuz_help; zuz:error "subcommand Not found." ;;
     esac
 }
 
@@ -24,13 +24,10 @@ ___x_cmd_zuz_help(){
 # Section: other
 # NOTICE: tar czf - "$@" | split -b "$size" -a 3 - "$target_file."
 # NOTICE: In some environments, split doesnot have -d option. Thus we are using 7zip to compress
-
-x log init zuz
 ___x_cmd_zuz_run(){
     local IFS=' '
     # shellcheck disable=SC2154
-    [ -z "$logger_msg" ] || zuz:info "$logger_msg"
-    zuz:info "Command to execute => $*"
+    zuz:info "Command to execute => $* $extra_logger_msg"
     # IFS=
     "$@"
     local exit_code=$?
