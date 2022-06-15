@@ -30,17 +30,13 @@ x log init zuz
 ___x_cmd_zuz_run(){
     local IFS=' '
     # shellcheck disable=SC2154
-    zuz_log info "Command to execute => $* $logger_msg"
-    IFS=
-    eval "$@"
-    local exit_code="$?"
-    if [ "$exit_code" != 0 ];then
-        zuz_log debug "$*;Error Code: $exit_code"
-        return $exit_code
-    else
-        return 0
-    fi
-
+    [ -z "$logger_msg" ] || zuz:info "$logger_msg"
+    zuz:info "Command to execute => $*"
+    # IFS=
+    "$@"
+    local exit_code=$?
+    [ "$exit_code" = 0 ] || zuz:error "EXIT=$exit_code: $*"
+    return $exit_code
 }
 # EndSection
 

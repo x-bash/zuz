@@ -2,17 +2,9 @@
 
 # Section: zip the file
 ___x_cmd_zuz_z(){
-    param:dsl <<A
-advise:
-    #n          ___advise_ls
-option:
-    --size        ""  <size>=0       =~   [^.]+
-    #n          "target file"
-A
-    param:run
-
+    local size="${size:-0}"
     if [ $# = 0 ]; then
-        ___x_cmd_zuz_z help
+        ___x_cmd_zuz_help
     fi
 
     local target_file="${1:-filename}"; shift
