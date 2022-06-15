@@ -1,12 +1,19 @@
 # Author:       Li Junhao                   l@x-cmd.com
 # shellcheck    shell=sh disable=SC3043     # xrc
 
+xrc:mod:lib zuz     cat ls z
 
 # Section: main
 
 # TODO: Use Param Generator SYMPOSIS
-xrc param/latest
 ___x_cmd_zuz(){
+    case "$1" in
+        z|compress)         ___x_cmd_zuz_z      "$@" ;;
+        uz|decompress)      ___x_cmd_zuz_uz     "$@" ;;
+        uzr)                ___x_cmd_zuz_uzr    "$@" ;;
+        ls)                 ___x_cmd_zuz_ls     "$@" ;;
+    esac
+
     param:dsl <<A
 subcommand:
     z|compress          "compress file"
@@ -16,17 +23,11 @@ subcommand:
 A
     param:run
     if [ -z "$PARAM_SUBCMD" ] || [ -z "$*" ]; then
-        printf "\n%s\n    %s\n    %s\n    %s\n    %s\n" \
-                "SYMPOSIS:" \
-                "x z   <zipfile> <source...>" \
-                "x uz  <zipfile>" \
-                "x uzr <zipfile>" \
-                "x zl  <zipfile>"
-        ___x_cmd_zuz help
+        cat "$___X_CMD_MOD_ROOT/zuz/lib/help.txt"
         return 0
     fi
 
-    eval "___x_cmd_zuz_$PARAM_SUBCMD" "$@"
+    "___x_cmd_zuz_$PARAM_SUBCMD" "$@"
 }
 
 # EndSection
@@ -53,5 +54,4 @@ ___x_cmd_zuz_run(){
 }
 # EndSection
 
-xrc zuz/lib/cat zuz/lib/ls zuz/lib/uz zuz/lib/z
 xrc setmain ___x_cmd_zuz
