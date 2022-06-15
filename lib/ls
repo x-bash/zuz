@@ -2,7 +2,6 @@
 
 # Section: ls zip file
 ___x_cmd_zuz_ls(){
-
     local target_file="${1:-filename}"; shift
     local logger_msg="< $target_file"
     case "$target_file" in
