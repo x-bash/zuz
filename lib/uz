@@ -6,22 +6,9 @@
 # Reference: https://blog.csdn.net/example440982/article/details/51712973
 # Reference: https://wangying.sinaapp.com/archives/2574
 ___x_cmd_zuz_uz(){
-    param:dsl <<A
-advise:
-    #n          ___advise_ls
-option:
-    #n          "target file"
-A
-    param:run
-
     local target_file="${1:?Please provide filename}"
     local dest_folder="${2:-.}"
-    # Zsh Compatible
-    if [ "$#" -eq 1 ];then
-        shift 1
-    else
-        shift 2
-    fi
+    shift $#
 
     target_file="$( cd "$(dirname "$target_file")" && pwd )"/$(basename "$target_file")
     mkdir -p "$dest_folder"
