@@ -1,7 +1,0 @@
-lib/cat
-lib/help.txt
-lib/ls
-lib/uz
-lib/z
-lib/z_utils
-lib/zuz.advise.json
