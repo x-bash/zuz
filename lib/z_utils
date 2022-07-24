@@ -8,7 +8,7 @@ ___x_cmd_zuz_z_tgz(){
         return
     fi
 
-    if [ "$size" != 0 ]; then       ___x_cmd_zuz_run x 7z -v"$size" "$target_file" "$@"
-    else                            ___x_cmd_zuz_run tar czf "$target_file" "$@"
+    if [ "$size" != 0 ]; then           ___x_cmd_zuz_run x 7z -v"$size" "$target_file" "$@"
+    else                                ___x_cmd_zuz_run tar czf "$target_file" "$@"
     fi
 }
