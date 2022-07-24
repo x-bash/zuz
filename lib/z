@@ -10,25 +10,19 @@ ___x_cmd_zuz_z(){
     local target_file="${1:-filename}"; shift
     case "$target_file" in
         *.tar)
-                    # We should use 7zip for better compresssion
-                    if [ "$size" != 0 ]; then
-                        ___x_cmd_zuz_run x 7z -v"$size" "$target_file" "$@"
-                    else
-                        ___x_cmd_zuz_run tar cvf "$target_file" "$@"
+                    # We should use 7zip for better compresssion rate
+                    if [ "$size" != 0 ]; then       ___x_cmd_zuz_run x 7z -v"$size" "$target_file" "$@"
+                    else                            ___x_cmd_zuz_run tar cvf "$target_file" "$@"
                     fi
                     ;;
         *.tar.gz)
-                    if [ "$size" != 0 ]; then
-                        ___x_cmd_zuz_run x 7z -v"$size" "$target_file" "$@"
-                    else
-                        ___x_cmd_zuz_run tar czf "$target_file" "$@"
+                    if [ "$size" != 0 ]; then       ___x_cmd_zuz_run x 7z -v"$size" "$target_file" "$@"
+                    else                            ___x_cmd_zuz_run tar czf "$target_file" "$@"
                     fi
                     ;;
         *.tar.Z)
-                    if [ "$size" != 0 ]; then
-                        ___x_cmd_zuz_run x 7z -v"$size" "$target_file" "$@"
-                    else
-                        ___x_cmd_zuz_run tar cZf "$target_file" "$@"
+                    if [ "$size" != 0 ]; then       ___x_cmd_zuz_run x 7z -v"$size" "$target_file" "$@"
+                    else                            ___x_cmd_zuz_run tar cZf "$target_file" "$@"
                     fi
                     ;;
         *.tar.xz)
@@ -42,17 +36,13 @@ ___x_cmd_zuz_z(){
                     fi
                     ;;
         *.bz2)
-                    if [ "$size" != 0 ]; then
-                        ___x_cmd_zuz_run x 7z -v"$size" "$target_file" "$@"
-                    else
-                        ___x_cmd_zuz_run tar cjf "$target_file" "$@"
+                    if [ "$size" != 0 ]; then       ___x_cmd_zuz_run x 7z -v"$size" "$target_file" "$@"
+                    else                            ___x_cmd_zuz_run tar cjf "$target_file" "$@"
                     fi
                     ;;
         *.tgz)
-                    if [ "$size" != 0 ]; then
-                        ___x_cmd_zuz_run x 7z -v"$size" "$target_file" "$@"
-                    else
-                        ___x_cmd_zuz_run tar czf "$target_file" "$@"
+                    if [ "$size" != 0 ]; then       ___x_cmd_zuz_run x 7z -v"$size" "$target_file" "$@"
+                    else                            ___x_cmd_zuz_run tar czf "$target_file" "$@"
                     fi
                     ;;
         *.xz)
@@ -74,10 +64,8 @@ ___x_cmd_zuz_z(){
                     ;;
         *.7z)
                     # NOTE: Wait static build. use 7zr command
-                    if [ "$size" != 0 ]; then
-                        ___x_cmd_zuz_run x 7z a -v"$size" "$target_file" "$@"
-                    else
-                        ___x_cmd_zuz_run x 7z a "$target_file" "$@"
+                    if [ "$size" != 0 ]; then       ___x_cmd_zuz_run x 7z a -v"$size" "$target_file" "$@"
+                    else                            ___x_cmd_zuz_run x 7z a "$target_file" "$@"
                     fi
                     ;;
         *)
