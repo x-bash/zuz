@@ -38,11 +38,7 @@ ___x_cmd_zuz_z(){
                     else                            ___x_cmd_zuz_run tar cjf "$target_file" "$@"
                     fi
                     ;;
-        *.tgz)
-                    if [ "$size" != 0 ]; then       ___x_cmd_zuz_run x 7z -v"$size" "$target_file" "$@"
-                    else                            ___x_cmd_zuz_run tar czf "$target_file" "$@"
-                    fi
-                    ;;
+        *.tgz)      ___x_cmd_zuz_z_tgz "$@" ;;
         *.xz)
                     # NOTE: xz: Can't compress directory, Will skipping. Can use tar container.
                     # We can use 7zip to handle xz ? Little footprint.
