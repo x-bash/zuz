@@ -1,5 +1,7 @@
 # shellcheck shell=sh disable=SC2034,SC2154,SC3043
 
+xrc:mod:lib zuz     z_utils
+
 # Section: zip the file
 ___x_cmd_zuz_z(){
     local size="${size:-0}"
@@ -15,11 +17,7 @@ ___x_cmd_zuz_z(){
                     else                            ___x_cmd_zuz_run tar cvf "$target_file" "$@"
                     fi
                     ;;
-        *.tar.gz)
-                    if [ "$size" != 0 ]; then       ___x_cmd_zuz_run x 7z -v"$size" "$target_file" "$@"
-                    else                            ___x_cmd_zuz_run tar czf "$target_file" "$@"
-                    fi
-                    ;;
+        *.tar.gz)   ___x_cmd_zuz_z_tgz "$@" ;;
         *.tar.Z)
                     if [ "$size" != 0 ]; then       ___x_cmd_zuz_run x 7z -v"$size" "$target_file" "$@"
                     else                            ___x_cmd_zuz_run tar cZf "$target_file" "$@"
