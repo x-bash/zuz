@@ -30,55 +30,31 @@ ___x_cmd_zuz_uz(){
 
 ___x_cmd_zuz_uz_whole_file(){
     case $target_file in
-        *.tar)
-            ___x_cmd_zuz_run tar xvf "$target_file"
-            ;;
-        *.tar.gz)
-            ___x_cmd_zuz_run tar xzvf "$target_file"
-            ;;
-        *.tar.Z)
-            ___x_cmd_zuz_run tar xZvf "$target_file"
-            ;;
-        *.bz2)
-            ___x_cmd_zuz_run tar xjvf "$target_file"
-            ;;
-        *.tar.xz)
-            ___x_cmd_zuz_run tar xvf "$target_file"
-            ;;
-        *.bz2.*)
-            cat "${target_file%.*}".* | tar xjvf
-            ;;
-        *.tar.Z.*)
-            cat "${target_file%.*}".* | tar xZvf
-            ;;
-        *.tar.gz.*)
-            cat "${target_file%.*}".* | tar xzv
-            ;;
-        *.tar.*)
-            cat "${target_file%.*}".* | tar xvf
-            ;;
-        *.tgz)
-            ___x_cmd_zuz_run tar xzvf "$target_file"
-            ;;
-        *.xz)
-            ___x_cmd_zuz_run xz -k -d "$target_file"
-            ;;
+        *.tar)                  ___x_cmd_zuz_run tar xvf "$target_file"             ;;
+        *.tar.gz)               ___x_cmd_zuz_run tar xzvf "$target_file"            ;;
+        *.tar.Z)                ___x_cmd_zuz_run tar xZvf "$target_file"            ;;
+        *.bz2)                  ___x_cmd_zuz_run tar xjvf "$target_file"            ;;
+        *.tar.xz)               ___x_cmd_zuz_run tar xvf "$target_file"             ;;
+        *.bz2.*)                cat "${target_file%.*}".* | tar xjvf                ;;
+        *.tar.Z.*)              cat "${target_file%.*}".* | tar xZvf                ;;
+        *.tar.gz.*)             cat "${target_file%.*}".* | tar xzv                 ;;
+        *.tar.*)                cat "${target_file%.*}".* | tar xvf                 ;;
+        *.tgz)                  ___x_cmd_zuz_run tar xzvf "$target_file"            ;;
+        *.xz)                   ___x_cmd_zuz_run xz -k -d "$target_file"            ;;
         *.zip)
-            ___x_cmd_zuz_run x 7z x "$target_file"
-            # ___x_cmd_zuz_run x unzip "$target_file"
-            # unzip xfv "$target_file" "$@"
-            ;;
-        *.rar)
-            ___x_cmd_zuz_run x unrar "$target_file"
-            ;;
+                                ___x_cmd_zuz_run x 7z x "$target_file"
+                                # ___x_cmd_zuz_run x unzip "$target_file"
+                                # unzip xfv "$target_file" "$@"
+                                ;;
+        *.rar)                  ___x_cmd_zuz_run x unrar "$target_file"             ;;
         *.7z)
-            #NOTE:: use 7zr command
-            ___x_cmd_zuz_run x 7z x "$target_file"
-            ;;
+                                #NOTE:: use 7zr command
+                                ___x_cmd_zuz_run x 7z x "$target_file"
+                                ;;
         *)
-            ___x_cmd_zuz --help; zuz:warn "Unsupported to decompress as $target_file format.";
-            return 1
-            ;;
+                                ___x_cmd_zuz --help; zuz:warn "Unsupported to decompress as $target_file format.";
+                                return 1
+                                ;;
     esac
 }
 
